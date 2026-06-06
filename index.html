@@ -457,40 +457,69 @@
 
       // Create sharp chassis texture
       function createChassisCanvas(text, blurAmount) {
-        const c = document.createElement("canvas");
-        c.width = 600;
-        c.height = 140;
-        const ctx = c.getContext("2d");
+        // Temporary canvas for measuring
+        const measureCanvas = document.createElement("canvas");
 
-        // scratches only
-        ctx.filter = `blur(${blurAmount}px)`;
-        ctx.strokeStyle = "rgba(0,0,0,.18)";
-        ctx.lineWidth = 1.2;
+        const measureCtx = measureCanvas.getContext("2d");
 
-        for (let i = 0; i < 260; i++) {
-          const x = Math.random() * c.width;
-          const y = Math.random() * c.height;
-          const len = 10 + Math.random() * 26;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(x + len, y + (Math.random() * 4 - 2));
-          ctx.stroke();
-        }
-
-        // sharp text
-        ctx.filter = "none";
-
-        // Auto-fit monospace text
         let size = 56;
+
+        measureCtx.font = `700 ${size}px Consolas`;
+
         while (size > 16) {
-          ctx.font = `700 ${size}px Consolas`;
-          if (ctx.measureText(text).width <= c.width - 40) break;
+          measureCtx.font = `700 ${size}px Consolas`;
+
+          if (measureCtx.measureText(text).width <= 560) break;
+
           size--;
         }
 
+        measureCtx.font = `700 ${size}px Consolas`;
+
+        const textWidth = measureCtx.measureText(text).width;
+
+        const c = document.createElement("canvas");
+
+        c.width = Math.ceil(textWidth) + 40;
+
+        c.height = size + 40;
+
+        const ctx = c.getContext("2d");
+
+        // scratches
+        ctx.filter = `blur(${blurAmount}px)`;
+
+        ctx.strokeStyle = "rgba(0,0,0,.18)";
+
+        ctx.lineWidth = 1.2;
+
+        const scratchCount = 250 + blurAmount * 100;
+
+        for (let i = 0; i < scratchCount; i++) {
+          const x = Math.random() * c.width;
+
+          const y = Math.random() * c.height;
+
+          const len = 10 + Math.random() * 25;
+
+          ctx.beginPath();
+
+          ctx.moveTo(x, y);
+
+          ctx.lineTo(x + len, y + (Math.random() * 4 - 2));
+
+          ctx.stroke();
+        }
+
+        // chassis text
+        ctx.filter = "none";
+
         ctx.font = `700 ${size}px Consolas`;
+
         ctx.fillStyle = "rgba(0,0,0,.85)";
+
         ctx.textBaseline = "middle";
+
         ctx.fillText(text, 20, c.height / 2);
 
         return c;
