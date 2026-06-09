@@ -26,6 +26,12 @@
         background: var(--bg);
         color: var(--text);
       }
+      a {
+        color: var(--brand);
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 12px;
+      }
       .wrap {
         max-width: 1200px;
         margin: auto;
@@ -168,6 +174,9 @@
           max-height: none;
         }
       }
+      #hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -185,7 +194,8 @@
           <label>Upload PDF</label>
           <input id="pdfFile" type="file" accept="application/pdf" />
 
-          <div class="section">
+          <div class="section" id="hidden">
+            >
             <h2>Chassis Pencil Print</h2>
 
             <label>Chassis Number</label>
@@ -237,7 +247,7 @@
 
           <div class="section">
             <h2>Stamp PNG</h2>
-
+            <a href="png.html" id="png" class="html">CONVERT TO PNG </a>
             <label>Upload Stamp</label>
             <input id="stampFile" type="file" accept="image/png,image/jpeg" />
 
